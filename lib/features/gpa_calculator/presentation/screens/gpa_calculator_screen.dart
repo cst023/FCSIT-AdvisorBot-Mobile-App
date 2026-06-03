@@ -35,11 +35,15 @@ class _GpaCalculatorView extends StatelessWidget {
         actions: [
           // Reset button — clears all inputs and results
           IconButton(
-            icon: const Icon(Icons.refresh_rounded,
-                color: AppColors.textSecondary),
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: AppColors.textSecondary,
+            ),
             tooltip: 'Reset all',
             onPressed: () {
               context.read<GpaProvider>().resetAll();
+              // Also clear the CGPA text controllers via a key rebuild —
+              // handled by the _CgpaSection using a ValueKey on the form.
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Calculator reset'),
@@ -127,15 +131,20 @@ class _GpaSection extends StatelessWidget {
         // ---- Results Row ----
         Row(
           children: [
-            ResultRow(
-              label: 'GPA:',
-              value: provider.gpa?.toStringAsFixed(2),
-              highlight: true,
+            Expanded(
+              child: ResultRow(
+                label: 'GPA:',
+                value: provider.gpa?.toStringAsFixed(2),
+                highlight: true,
+              ),
             ),
-            const SizedBox(width: 32),
-            ResultRow(
-              label: 'Semester credits:',
-              value: provider.semesterCredits?.toString(),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ResultRow(
+                label: 'Semester credits:',
+                value: provider.semesterCredits?.toString(),
+                highlight: true,
+              ),
             ),
           ],
         ),
@@ -189,16 +198,15 @@ class _CgpaSectionState extends State<_CgpaSection> {
         Text(
           gpaReady
               ? 'GPA for this semester: ${provider.gpa!.toStringAsFixed(2)}  '
-                '(${provider.semesterCredits} credits)\n'
-                'Now enter your previous CGPA and total credits.'
+                    '(${provider.semesterCredits} credits)\n'
+                    'Now enter your previous CGPA and total credits.'
               : 'Calculate your GPA above first, then enter your\n'
-                'current CGPA and total credits taken prior to this semester.',
+                    'current CGPA and total credits taken prior to this semester.',
           style: TextStyle(
             fontSize: 13,
             color: gpaReady ? AppColors.primary : AppColors.textSecondary,
             height: 1.5,
-            fontWeight:
-                gpaReady ? FontWeight.w500 : FontWeight.normal,
+            fontWeight: gpaReady ? FontWeight.w500 : FontWeight.normal,
           ),
         ),
         const SizedBox(height: 16),
@@ -207,17 +215,17 @@ class _CgpaSectionState extends State<_CgpaSection> {
         const Text(
           'Current CGPA:',
           style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary),
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textSecondary,
+          ),
         ),
         const SizedBox(height: 6),
         _CgpaTextField(
           controller: _cgpaController,
           hint: 'e.g.: 3.5',
           enabled: gpaReady,
-          onChanged: (v) =>
-              context.read<GpaProvider>().currentCgpaInput = v,
+          onChanged: (v) => context.read<GpaProvider>().currentCgpaInput = v,
         ),
         const SizedBox(height: 14),
 
@@ -225,9 +233,10 @@ class _CgpaSectionState extends State<_CgpaSection> {
         const Text(
           'Total Credits Taken:',
           style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary),
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textSecondary,
+          ),
         ),
         const SizedBox(height: 6),
         _CgpaTextField(
@@ -259,15 +268,20 @@ class _CgpaSectionState extends State<_CgpaSection> {
         // ---- Results Row ----
         Row(
           children: [
-            ResultRow(
-              label: 'CGPA:',
-              value: provider.cgpa?.toStringAsFixed(2),
-              highlight: true,
+            Expanded(
+              child: ResultRow(
+                label: 'CGPA:',
+                value: provider.cgpa?.toStringAsFixed(2),
+                highlight: true,
+              ),
             ),
-            const SizedBox(width: 32),
-            ResultRow(
-              label: 'Total credits:',
-              value: provider.totalCredits?.toString(),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ResultRow(
+                label: 'Total credits:',
+                value: provider.totalCredits?.toString(),
+                highlight: true,
+              ),
             ),
           ],
         ),
@@ -309,27 +323,30 @@ class _CgpaTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         filled: true,
-        fillColor:
-            enabled ? AppColors.surface : AppColors.surfaceVariant,
+        fillColor: enabled ? AppColors.surface : AppColors.surfaceVariant,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(25),
           borderSide: const BorderSide(color: AppColors.inputBorder),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(25),
           borderSide: const BorderSide(color: AppColors.inputBorder),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide:
-              const BorderSide(color: AppColors.primary, width: 2),
+          borderRadius: BorderRadius.circular(25),
+          borderSide: const BorderSide(
+            color: AppColors.inputBorder,
+            width: 1.5,
+          ),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(25),
           borderSide: const BorderSide(color: AppColors.inputBorder),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 12,
+        ),
       ),
       onChanged: onChanged,
     );
@@ -358,18 +375,13 @@ class _PrimaryButton extends StatelessWidget {
           disabledBackgroundColor: AppColors.primary.withOpacity(0.4),
           foregroundColor: Colors.white,
           disabledForegroundColor: Colors.white70,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(vertical: 14),
           elevation: 0,
         ),
         child: Text(
           label,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -392,14 +404,20 @@ class _ErrorBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline_rounded,
-              size: 16, color: AppColors.error),
+          const Icon(
+            Icons.error_outline_rounded,
+            size: 16,
+            color: AppColors.error,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               message,
               style: const TextStyle(
-                  fontSize: 13, color: AppColors.error, height: 1.4),
+                fontSize: 13,
+                color: AppColors.error,
+                height: 1.4,
+              ),
             ),
           ),
         ],

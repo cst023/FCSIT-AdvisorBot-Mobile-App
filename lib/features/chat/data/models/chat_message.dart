@@ -10,6 +10,7 @@ class ChatMessage {
   final MessageSender sender;
   final DateTime timestamp;
   final MessageStatus status;
+  final double? responseTimeSeconds;
 
   ChatMessage({
     required this.id,
@@ -17,11 +18,13 @@ class ChatMessage {
     required this.sender,
     required this.timestamp,
     this.status = MessageStatus.delivered,
+    this.responseTimeSeconds,
   });
 
   ChatMessage copyWith({
     String? text,
     MessageStatus? status,
+    double? responseTimeSeconds,
   }) {
     return ChatMessage(
       id: id,
@@ -29,6 +32,7 @@ class ChatMessage {
       sender: sender,
       timestamp: timestamp,
       status: status ?? this.status,
+      responseTimeSeconds: responseTimeSeconds ?? this.responseTimeSeconds,
     );
   }
 
@@ -42,10 +46,11 @@ class ChatMessage {
   Map<String, dynamic> toJson() => {
         'id': id,
         'text': text,
-        'sender': sender.name,           // stores "user" or "bot"
-        'timestamp': timestamp.toIso8601String(),
-        'status': status.name,           // stores "delivered", "error", etc.
-      };
+      'sender': sender.name,           // stores "user" or "bot"
+      'timestamp': timestamp.toIso8601String(),
+      'status': status.name,           // stores "delivered", "error", etc.
+      'responseTimeSeconds': responseTimeSeconds,
+    };
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) => ChatMessage(
         id: json['id'] as String,
@@ -53,6 +58,7 @@ class ChatMessage {
         sender: MessageSender.values.byName(json['sender'] as String),
         timestamp: DateTime.parse(json['timestamp'] as String),
         status: MessageStatus.values.byName(json['status'] as String),
+        responseTimeSeconds: (json['responseTimeSeconds'] as num?)?.toDouble(),
       );
 
   /// Convenience: encode a list of messages to a JSON string for storage.

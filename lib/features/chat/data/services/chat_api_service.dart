@@ -5,16 +5,16 @@ import '../models/api_response.dart';
 class ChatApiService {
   // -----------------------------------------------------------------------
   // URL CONFIGURATION 
-  static const String _localUrl = 'http://192.168.0.x:8000'; // ← your LAN IP
-  static const String _cloudUrl = 'YOUR_CLOUD_SERVER_URL'; // ← Cloud URL
-  static const bool _useCloud = false; // <= Set to false if use local server
+  static const String _localUrl = 'http://192.168.0.5:8000'; // ← your LAN IP
+  static const String _cloudUrl = 'YOUR_CLOUD_URL'; // ← Cloud URL
+  static const bool _useCloud = false; 
   // -----------------------------------------------------------------------
 
   static String get baseUrl => _useCloud ? _cloudUrl : _localUrl;
 
   static const _timeout = Duration(seconds: 120);
 
-  Future<ApiResponse> sendMessage(String question, {String conversationSummary=""}) async {
+  Future<ApiResponse> sendMessage(String question) async {
     final uri = Uri.parse('$baseUrl/query');
 
     late http.Response response;
@@ -25,8 +25,7 @@ class ChatApiService {
             uri,
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
-              'question': question,
-              'conversation_summary': conversationSummary
+              'question': question
             }),
           )
           .timeout(

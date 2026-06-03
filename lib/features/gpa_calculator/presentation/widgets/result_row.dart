@@ -1,13 +1,10 @@
-// Displays a labelled result value (e.g. "GPA: 3.45").
-// Used for both GPA and CGPA result rows.
-
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
 
 class ResultRow extends StatelessWidget {
   final String label;
-  final String? value;       // null = not yet calculated (shows "—")
-  final bool highlight;      // true = show value in primary blue
+  final String? value;
+  final bool highlight;
 
   const ResultRow({
     super.key,
@@ -18,30 +15,46 @@ class ResultRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textSecondary,
+    final hasValue = value != null;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(25),
+        border: Border.all(color: AppColors.inputBorder, width: 1),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
           ),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          value ?? '—',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: value != null && highlight
-                ? AppColors.primary
-                : value != null
-                    ? AppColors.textPrimary
-                    : AppColors.textHint,
+          const SizedBox(height: 8),
+          Text(
+            value ?? '—',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 34,
+              height: 1,
+              fontWeight: FontWeight.w800,
+              color: hasValue && highlight
+                  ? AppColors.primary
+                  : hasValue
+                  ? AppColors.textPrimary
+                  : AppColors.textHint,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

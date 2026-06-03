@@ -49,10 +49,7 @@ class CourseTable extends StatelessWidget {
 
         // ---- Course Rows ----
         ...courses.map(
-          (course) => _CourseRow(
-            key: ValueKey(course.id),
-            course: course,
-          ),
+          (course) => _CourseRow(key: ValueKey(course.id), course: course),
         ),
 
         // ---- Add Course Button ----
@@ -81,8 +78,7 @@ class _CourseRowState extends State<_CourseRow> {
   @override
   void initState() {
     super.initState();
-    _creditsController =
-        TextEditingController(text: widget.course.credits);
+    _creditsController = TextEditingController(text: widget.course.credits);
   }
 
   @override
@@ -108,8 +104,11 @@ class _CourseRowState extends State<_CourseRow> {
                 ? IconButton(
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
-                    icon: const Icon(Icons.remove_circle_outline_rounded,
-                        size: 20, color: AppColors.error),
+                    icon: const Icon(
+                      Icons.remove_circle_outline_rounded,
+                      size: 20,
+                      color: AppColors.error,
+                    ),
                     tooltip: 'Remove row',
                     onPressed: () => provider.removeCourse(widget.course.id),
                   )
@@ -122,28 +121,30 @@ class _CourseRowState extends State<_CourseRow> {
             child: _TableCell(
               child: TextField(
                 controller: _creditsController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                      RegExp(r'^\d*\.?\d*')),
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
                 ],
                 style: const TextStyle(
-                    fontSize: 14, color: AppColors.textPrimary),
+                  fontSize: 14,
+                  color: AppColors.textPrimary,
+                ),
                 decoration: const InputDecoration(
                   hintText: 'Credits',
-                  hintStyle:
-                      TextStyle(fontSize: 13, color: AppColors.textHint),
+                  hintStyle: TextStyle(fontSize: 13, color: AppColors.textHint),
                   filled: false,
                   fillColor: Colors.transparent,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 10,
+                  ),
                 ),
-                onChanged: (v) =>
-                    provider.updateCredits(widget.course.id, v),
+                onChanged: (v) => provider.updateCredits(widget.course.id, v),
               ),
             ),
           ),
@@ -160,24 +161,29 @@ class _CourseRowState extends State<_CourseRow> {
                   isExpanded: true,
                   hint: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('Grade',
-                        style: TextStyle(
-                            fontSize: 13, color: AppColors.textHint)),
+                    child: Text(
+                      'Grade',
+                      style: TextStyle(fontSize: 13, color: AppColors.textHint),
+                    ),
                   ),
                   icon: const Padding(
                     padding: EdgeInsets.only(right: 6),
-                    child: Icon(Icons.keyboard_arrow_down_rounded,
-                        size: 20, color: AppColors.textSecondary),
+                    child: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   style: const TextStyle(
-                      fontSize: 14, color: AppColors.textPrimary),
+                    fontSize: 14,
+                    color: AppColors.textPrimary,
+                  ),
                   items: CourseEntry.gradeOptions
                       .map(
                         (g) => DropdownMenuItem(
                           value: g,
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
                               '$g  (${CourseEntry.gradePoints[g]!.toStringAsFixed(2)})',
                               style: const TextStyle(fontSize: 14),
@@ -186,8 +192,7 @@ class _CourseRowState extends State<_CourseRow> {
                         ),
                       )
                       .toList(),
-                  onChanged: (v) =>
-                      provider.updateGrade(widget.course.id, v),
+                  onChanged: (v) => provider.updateGrade(widget.course.id, v),
                 ),
               ),
             ),
@@ -209,9 +214,10 @@ class _TableCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.inputBorder),
-        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: AppColors.inputBorder, width: 1),
+        borderRadius: BorderRadius.circular(25),
         color: AppColors.surface,
       ),
       child: child,

@@ -213,12 +213,27 @@ class _BotBubble extends StatelessWidget {
               // Timestamp below the bubble
               Padding(
                 padding: const EdgeInsets.only(left: 4, top: 4),
-                child: Text(
-                  DateFormatter.formatMessageTime(message.timestamp),
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.textHint,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DateFormatter.formatMessageTime(message.timestamp),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textHint,
+                      ),
+                    ),
+                    if (message.responseTimeSeconds != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        'Time taken: ${message.responseTimeSeconds!.round()}s',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textHint,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
             ],

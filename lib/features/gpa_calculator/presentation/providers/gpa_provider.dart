@@ -9,7 +9,7 @@ class GpaProvider extends ChangeNotifier {
 
   late List<CourseEntry> _courses;
 
-  // Start with 4 empty rows.
+  // Start with 4 empty rows as per the design.
   static const _defaultRowCount = 4;
 
   // ---- GPA Result State ----

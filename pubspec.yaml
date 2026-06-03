@@ -23,11 +23,24 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.7
 
 flutter_icons:
   android: true
   ios: true
   image_path: assets/app_icon.png
 
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/app_splash.png
+  ios_content_mode: center
+  android_12:
+    color: "#FFFFFF"
+    image: assets/app_splash_mobile.png
+
 flutter:
   uses-material-design: true
+  assets:
+    - assets/app_icon.png
+    - assets/app_splash.png
+    - assets/app_splash_mobile.png

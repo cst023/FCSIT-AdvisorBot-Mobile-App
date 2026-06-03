@@ -14,13 +14,11 @@ class ChatProvider extends ChangeNotifier {
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
   BackendStatus _backendStatus = BackendStatus.checking;
-  String _conversationSummary = "";
 
   // ---- Persistence ----
 
   // Key used to store the message list and chat memory in SharedPreferences.
   static const _storageKey = 'fcsit_advisorbot_messages';
-  static const _summaryKey = 'fcsit_advisorbot_conversation_summary';
 
 
   // Maximum number of messages to persist locally.
@@ -57,7 +55,6 @@ class ChatProvider extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final stored = prefs.getString(_storageKey);
-      _conversationSummary = prefs.getString(_summaryKey) ?? "";
 
       if (stored != null && stored.isNotEmpty) {
         final loaded = ChatMessage.decodeList(stored)
@@ -95,7 +92,6 @@ class ChatProvider extends ChangeNotifier {
           : _messages;
 
       await prefs.setString(_storageKey, ChatMessage.encodeList(toSave));
-      await prefs.setString(_summaryKey, _conversationSummary);
     } catch (_) {
       // Save failures are silently swallowed — a failed persist is not
       // worth crashing or alarming the user over.
@@ -141,11 +137,15 @@ class ChatProvider extends ChangeNotifier {
       id: _uuid.v4(),
       text: "Hello! 👋 I'm **AdvisorBot**, your FCSIT academic advising assistant.\n\n"
             "You can ask me about:\n"
-            "- Programme structure & curriculum\n"
+            "- Programme structure\n"
             "- Course requirements & prerequisites\n"
             "- Grading system & academic policies\n"
-            "- Credit transfer rules\n"
+            "- Faculty information\n"
             "- GPA / CGPA calculation\n\n"
+            "To help me give you the most accurate info, please ensure your questions are:\n"
+            "- Clear and specific\n"
+            "- Concise (avoid unnecessary details)\n"
+            "- Self-contained (include all relevant info in one message, avoid vague follow ups)\n\n"
             "How can I help you today?",
       sender: MessageSender.bot,
       timestamp: DateTime.now(),
@@ -171,7 +171,7 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _apiService.sendMessage(trimmed, conversationSummary: _conversationSummary);
+      final response = await _apiService.sendMessage(trimmed);
 
       _messages.add(ChatMessage(
         id: _uuid.v4(),
@@ -179,13 +179,12 @@ class ChatProvider extends ChangeNotifier {
         sender: MessageSender.bot,
         timestamp: DateTime.now(),
         status: MessageStatus.delivered,
+        responseTimeSeconds: response.responseTimeSeconds,
       ));
 
       if (_backendStatus != BackendStatus.online) {
         _backendStatus = BackendStatus.online;
       }
-
-      _conversationSummary = response.updatedSummary ?? _conversationSummary;
 
     } on ChatApiException catch (e) {
       _messages.add(ChatMessage(
@@ -225,8 +224,7 @@ class ChatProvider extends ChangeNotifier {
 
   // clearChat wipes both in-memory messages and the persisted copy.
   void clearChat() {
-    _messages.clear();
-    _conversationSummary = ""; 
+    _messages.clear(); 
     _addWelcomeMessage();
     notifyListeners();
     _saveMessages(); 
