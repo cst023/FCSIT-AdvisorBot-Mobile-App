@@ -1,4 +1,4 @@
-# FCSIT AdvisorBot
+# FCSIT AdvisorBot Mobile App
 
 A Flutter mobile application for the FCSIT AdvisorBot, a RAG-based academic advisory chatbot for students of FCSIT UNIMAS.
 
