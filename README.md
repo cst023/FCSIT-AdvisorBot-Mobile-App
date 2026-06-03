@@ -13,7 +13,7 @@ A Flutter mobile application for the FCSIT AdvisorBot, a RAG-based academic advi
 
 ## Prerequisites
 
-1. Flutter SDK (version 3.3.0 or later)
+1. Flutter SDK (version 3.32.4 or later)
 2. For Android: An Android device running Android 13.0 or later
 3. For Web: Google Chrome
 4. The [AdvisorBot backend](https://github.com/cst023/FCSIT-AdvisorBot) running locally or deployed to the cloud
