@@ -2,7 +2,7 @@
 
 A Flutter mobile application for the FCSIT AdvisorBot, a RAG-based academic advisory chatbot for students of FCSIT UNIMAS.
 
-> **Note:** This repository contains the Flutter frontend only. The chatbot backend is in a separate repository — you will need it running before the app can answer queries.
+> **Note:** This repository contains the Flutter frontend only. The chatbot backend is in a separate repository: [AdvisorBot Backend](https://github.com/cst023/FCSIT-AdvisorBot) — you will need it running before the app can answer queries.
 
 ## Features
 
